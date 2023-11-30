@@ -1,5 +1,6 @@
 import { ButtonHTMLAttributes } from "react";
 
+// Menggunakan ButtonHTMLAttributes untuk mewarisi semua properti HTML valid untuk elemen <button>
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement>;
 
 const Button = ({ children, ...props }: ButtonProps) => {

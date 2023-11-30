@@ -16,7 +16,11 @@ const Input = forwardRef(
 
     return (
       <p className="flex flex-col gap-1 my-4">
-        <label className="text-sm font-bold uppercase text-stone-500">
+        {/* Menambahkan elemen label */}
+        <label
+          className="text-sm font-bold uppercase text-stone-500"
+          htmlFor={label}
+        >
           {label}
         </label>
         {textarea ? (
