@@ -12,15 +12,23 @@ export interface Project {
   // dueDate?: Date; // For parsedDueDate in NewProject
 }
 
+export interface Task {
+  id?: number;
+  projectId?: number | string | null | undefined;
+  text?: string;
+}
+
 interface ProjectsState {
   selectedProjectId: number | string | null | undefined;
   projects: Project[];
+  tasks: Task[];
 }
 
 const App = () => {
   const [projectsState, setProjectsState] = useState<ProjectsState>({
     selectedProjectId: undefined, // * Untuk mendefinisikan kondisi seperti undefined = tidak ada aksi, null = create project dan seterusnya
     projects: [],
+    tasks: [],
   });
 
   function handleStartAddProject() {
@@ -67,8 +75,51 @@ const App = () => {
     });
   }
 
+  function handleDeleteProject() {
+    setProjectsState((prevState) => {
+      return {
+        ...prevState,
+        selectedProjectId: undefined,
+        projects: prevState.projects.filter(
+          (project) => project.id !== prevState.selectedProjectId
+        ),
+      };
+    });
+  }
+
+  function handleAddTask(text: string) {
+    setProjectsState((prevState) => {
+      const taskId = Math.random();
+
+      const newTask = {
+        text: text,
+        projectId: prevState.selectedProjectId,
+        id: taskId,
+      };
+
+      return {
+        ...prevState,
+        tasks: [...prevState.tasks, newTask],
+      };
+    });
+  }
+
+  function handleDeleteTask(id: number) {
+    setProjectsState((prevState) => {
+      return {
+        ...prevState,
+        selectedProjectId: projectsState.selectedProjectId,
+        tasks: prevState.tasks.filter((task) => task.id !== id),
+      };
+    });
+  }
+
   const selectedProject = projectsState.projects.find(
     (project) => project.id === projectsState.selectedProjectId
+  );
+
+  const selectedProjectTask = projectsState.tasks.filter(
+    (task) => task.projectId === projectsState.selectedProjectId
   );
 
   let content;
@@ -80,7 +131,15 @@ const App = () => {
   } else if (projectsState.selectedProjectId === undefined) {
     content = <NoProjectSelected onStartAddProject={handleStartAddProject} />;
   } else if (selectedProject) {
-    content = <SelectedProject project={selectedProject} />;
+    content = (
+      <SelectedProject
+        project={selectedProject}
+        onDelete={handleDeleteProject}
+        onAddTask={handleAddTask}
+        onDeleteTask={handleDeleteTask}
+        tasks={selectedProjectTask}
+      />
+    );
   }
 
   return (

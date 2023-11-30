@@ -1,10 +1,21 @@
-import { Project } from "../App";
+import { Project, Task } from "../App";
+import Tasks from "./Tasks";
 
 type PropsSelectedProject = {
   project: Project;
+  onDelete: () => void;
+  onAddTask: (value: string) => void;
+  onDeleteTask: (value: number) => void;
+  tasks: Task[];
 };
 
-const SelectedProject = ({ project }: PropsSelectedProject) => {
+const SelectedProject = ({
+  project,
+  onDelete,
+  onAddTask,
+  onDeleteTask,
+  tasks,
+}: PropsSelectedProject) => {
   const formattedDate = new Date(project.dueDate!).toLocaleDateString("id-ID", {
     year: "numeric",
     month: "short",
@@ -18,7 +29,10 @@ const SelectedProject = ({ project }: PropsSelectedProject) => {
           <h1 className="text-3xl font-bold text-stone-600 mb-2">
             {project.title}
           </h1>
-          <button className="text-stone-600 hover:text-stone-950">
+          <button
+            className="text-stone-600 hover:text-stone-950"
+            onClick={onDelete}
+          >
             Delete
           </button>
         </div>
@@ -27,7 +41,7 @@ const SelectedProject = ({ project }: PropsSelectedProject) => {
           {project.description}
         </p>
       </header>
-      Task
+      <Tasks tasks={tasks} onAdd={onAddTask} onDelete={onDeleteTask} />
     </div>
   );
 };
