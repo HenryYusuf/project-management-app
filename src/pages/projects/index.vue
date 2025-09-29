@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Home Page</h1>
+    <h1>Projects Page</h1>
     <RouterLink to="/">Go to Home</RouterLink>
     <ul>
       <li v-for="project in projects" :key="project.id">
@@ -40,8 +40,6 @@ await getProjects()
   if (error) console.log(error)
 
   projects.value = data
-
-  console.log(projects.value)
 })()
 // END: Anonymous approach
 </script>
